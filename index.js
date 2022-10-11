@@ -28,17 +28,9 @@ app.use(cors({ origin: '*' }));
 app.use(bodyParser.raw());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
-const server = app.listen(8000 || 3000, () => {
+const server = app.listen(() => {
   console.log('Server started')
 })
-
-const senddata = async () => {
-  var x = await TradeData.find().limit(1).sort({ $natural: -1 }).limit(1)
-    .then((results) => {
-      return results
-    })
-  return x;
-}
 
 
 app.get('/', async (req, res) => {
