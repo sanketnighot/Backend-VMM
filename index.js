@@ -28,8 +28,8 @@ app.use(cors({ origin: '*' }));
 app.use(bodyParser.raw());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
-const server = app.listen(8000, () => {
-  console.log('Started in 8000 PORT')
+const server = app.listen(8000 || 3000, () => {
+  console.log('Server started')
 })
 
 const senddata = async () => {
