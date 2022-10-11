@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log('server listening at');
 });
 
@@ -40,6 +40,48 @@ app.get('/', async (req, res) => {
   res.send("Root path Zenith API")
 })
 
+const iO = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+  }
+});
+
+
+iO.on('connection', (client) => {
+
+
+  client.on("message", async (data) => {
+    if (data == "history") {
+      TradeData.find({}, function (err, result) {
+        if (err) throw err;
+
+        client.emit("data1", result);
+      });
+    }
+    else if (data == "upDate") {
+      var x = await senddata();
+      client.emit("data2", x);
+    }
+  })
+  TradeData.watch([{ $match: { operationType: { $in: ['insert'] } } }]).
+    on('change', data => {
+      console.log('Insert action triggered'); //getting triggered thrice
+      client.emit("data3", data.fullDocument.Close);
+    });
+  TradeData.watch([{ $match: { operationType: { $in: ['update'] } } }]).
+    on('change', data => {
+      console.log('UpDate action triggered'); //getting triggered thrice
+      client.emit("data4", data.updateDescription.updatedFields.Close);
+    });
+});
+
+const senddata = async () => {
+  var x = await TradeData.find().limit(1).sort({ $natural: -1 }).limit(1)
+    .then((results) => {
+      return results
+    })
+  return x;
+}
 // LEADERBOARD DATA -------------------------------------------------------------------------------------------------------------------
 
 app.get('/leaderboard', async (req, res) => {
