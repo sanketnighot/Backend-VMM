@@ -40,6 +40,11 @@ const senddata = async () => {
   return x;
 }
 
+
+app.get('/', async (req, res) => {
+  res.send("Root path Zenith API")
+})
+
 // LEADERBOARD DATA -------------------------------------------------------------------------------------------------------------------
 
 app.get('/leaderboard', async (req, res) => {
