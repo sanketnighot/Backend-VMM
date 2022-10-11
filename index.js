@@ -28,9 +28,12 @@ app.use(cors({ origin: '*' }));
 app.use(bodyParser.raw());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
-const server = app.listen(() => {
-  console.log('Server started')
-})
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log('server listening at');
+});
 
 
 app.get('/', async (req, res) => {
