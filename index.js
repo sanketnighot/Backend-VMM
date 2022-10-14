@@ -74,8 +74,6 @@ iO.on('connection', (client) => {
       client.emit("data4", data.updateDescription.updatedFields.Close);
     });
 });
-console.log('A user connected');
-
 
 
 const senddata = async () => {
