@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv")
 const cors = require('cors');
 const axios = require('axios')
-const TradeData = require("./models/TradeData");
+const { TradeDataHour, TradeDataDay, TradeDataMinute } = require("./models/TradeData");
 const PositionHistory = require('./models/PositionHistory')
 const TokenIssue = require('./models/TokensAddress')
 const { validateAddress } = require("@taquito/utils")
@@ -52,7 +52,7 @@ iO.on('connection', (client) => {
 
   client.on("message", async (data) => {
     if (data == "history") {
-      TradeData.find({}, function (err, result) {
+      TradeDataMinute.find({}, function (err, result) {
         if (err) throw err;
 
         client.emit("data1", result);
@@ -63,17 +63,20 @@ iO.on('connection', (client) => {
       client.emit("data2", x);
     }
   })
-  TradeData.watch([{ $match: { operationType: { $in: ['insert'] } } }]).
+  TradeDataMinute.watch([{ $match: { operationType: { $in: ['insert'] } } }]).
     on('change', data => {
       console.log('Insert action triggered'); //getting triggered thrice
       client.emit("data3", data.fullDocument.Close);
     });
-  TradeData.watch([{ $match: { operationType: { $in: ['update'] } } }]).
+  TradeDataMinute.watch([{ $match: { operationType: { $in: ['update'] } } }]).
     on('change', data => {
       console.log('UpDate action triggered'); //getting triggered thrice
       client.emit("data4", data.updateDescription.updatedFields.Close);
     });
 });
+console.log('A user connected');
+
+
 
 const senddata = async () => {
   var x = await TradeData.find().limit(1).sort({ $natural: -1 }).limit(1)
