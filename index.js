@@ -118,7 +118,7 @@ app.post('/positionshistory', async (req, res) => {
 
 const getData = async () => {
   
-  const result = TradeDataMinute.find({}).projection({}).sort({_id:-1}).limit(600).then(function (data) {
+  const result = TradeDataMinute.find({}).sort({_id: -1}).limit(900,function (data) {
     return data
   }).catch(err => console.log(err))
   return result
