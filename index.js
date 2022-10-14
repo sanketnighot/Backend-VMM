@@ -117,7 +117,8 @@ app.post('/positionshistory', async (req, res) => {
 
 
 const getData = async () => {
-  const result = TradeData.find({}).then(function (data) {
+  
+  const result = TradeDataMinute.find({}).projection({}).sort({_id:-1}).limit(600).then(function (data) {
     return data
   }).catch(err => console.log(err))
   return result
@@ -166,69 +167,77 @@ app.post('/granularity', async (req, res) => {
     res.send(newarr)
   }
   else if (req.body.granularity == "hour") {
-    const result = await getData();
-    let newarr = []
-    for (let i = 0; i < result.length; i = i + 12) {
-      let Open = result[i].Open;
-      let High = result[i].High;
-      let Low = result[i].Low;
-      let Close = result[i].Close;
-      for (let j = i; j < i + 12; j++) {
-        if (j + 1 > result.length) {
-          break
-        }
-        if (High < result[j].High) {
-          High = result[j].High
-        }
-        if (Low > result[j].Low) {
-          Low = result[j].Low
-        }
-        Close = result[j].Close
-      }
-      let data = {
-        Date: result[i].Date,
-        Open: Open,
-        High: High,
-        Low: Low,
-        Close: Close,
-      }
-      newarr.push(data)
-    }
+    const result = await TradeDataHour.find({}).then(function (data) {
+      return data
+    }).catch(err => console.log(err))
 
 
-    res.send(newarr)
+
+
+    // let newarr = []
+    // for (let i = 0; i < result.length; i = i + 12) {
+    //   let Open = result[i].Open;
+    //   let High = result[i].High;
+    //   let Low = result[i].Low;
+    //   let Close = result[i].Close;
+    //   for (let j = i; j < i + 12; j++) {
+    //     if (j + 1 > result.length) {
+    //       break
+    //     }
+    //     if (High < result[j].High) {
+    //       High = result[j].High
+    //     }
+    //     if (Low > result[j].Low) {
+    //       Low = result[j].Low
+    //     }
+    //     Close = result[j].Close
+    //   }
+    //   let data = {
+    //     Date: result[i].Date,
+    //     Open: Open,
+    //     High: High,
+    //     Low: Low,
+    //     Close: Close,
+    //   }
+    //   newarr.push(data)
+    // }
+
+
+    res.send(result)
   }
   else if (req.body.granularity == "day") {
-    const result = await getData();
+    const result = await TradeDataDay.find({}).then(function (data) {
+      return data
+    }).catch(err => console.log(err))
 
-    let newarr = []
-    for (let i = 0; i < result.length; i = i + 288) {
-      let Open = result[i].Open;
-      let High = result[i].High;
-      let Low = result[i].Low;
-      let Close = result[i].Close;
-      for (let j = i; j < i + 288; j++) {
-        if (j + 1 > result.length) {
-          break
-        }
-        if (High < result[j].High) {
-          High = result[j].High
-        }
-        if (Low > result[j].Low) {
-          Low = result[j].Low
-        }
-        Close = result[j].Close
-      }
-      let data = {
-        Date: result[i].Date,
-        Open: Open,
-        High: High,
-        Low: Low,
-        Close: Close,
-      }
-      newarr.push(data)
-    }
-    res.send(newarr)
+    // let newarr = []
+    // for (let i = 0; i < result.length; i = i + 288) {
+    //   let Open = result[i].Open;
+    //   let High = result[i].High;
+    //   let Low = result[i].Low;
+    //   let Close = result[i].Close;
+    //   for (let j = i; j < i + 288; j++) {
+    //     if (j + 1 > result.length) {
+    //       break
+    //     }
+    //     if (High < result[j].High) {
+    //       High = result[j].High
+    //     }
+    //     if (Low > result[j].Low) {
+    //       Low = result[j].Low
+    //     }
+    //     Close = result[j].Close
+    //   }
+    //   let data = {
+    //     Date: result[i].Date,
+    //     Open: Open,
+    //     High: High,
+    //     Low: Low,
+    //     Close: Close,
+    //   }
+    //   newarr.push(data)
+    // }
+    res.send(result)
   }
 })
 
