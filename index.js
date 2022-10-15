@@ -132,10 +132,22 @@ app.post('/granularity', async (req, res) => {
 
   if (req.body.granularity == "5minute") {
     const result = await getData();
-    res.send(result)
+    res.send(result.reverse())
   }
   else if (req.body.granularity == "15minute") {
-    const result = await getData();
+    var newdate_Minute = new Date().getMinutes();
+    let x = 0
+    if(newdate_Minute%15>=5 && newdate_Minute%15<10){
+      x=2;
+    }
+    if(newdate_Minute%15>0 && newdate_Minute%15<5){
+      x=1;
+    }
+    const result = await TradeDataMinute.find({}).sort({ _id: -1 }).limit(864+x, function (data) {
+      return data
+    }).catch(err => console.log(err))
+
+    result.reverse()
 
     let newarr = []
     for (let i = 0; i < result.length; i = i + 3) {
@@ -164,7 +176,6 @@ app.post('/granularity', async (req, res) => {
       }
       newarr.push(data)
     }
-
     res.send(newarr)
   }
   else if (req.body.granularity == "hour") {
