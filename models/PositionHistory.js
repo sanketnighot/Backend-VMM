@@ -13,11 +13,15 @@ const PositionHistory =new mongoose.Schema(
             type:Object
         },
         Totalpnl:{
-            type:Number
+            type:Number,
+            default:0
+        },
+        LiquidationCount:{
+            type:Number,
+            default:0
         }
 
     }
 )
 
-module.exports
-=mongoose.model("positionHistory", PositionHistory);
+module.exports=mongoose.model("positionHistory", PositionHistory);
