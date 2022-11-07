@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "nodemon index.js",
+    "server": "nodemon index.js --ignore client"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +13,7 @@
     "@amcharts/amcharts5": "^5.2.22",
     "@asbjornenge/tzkt-api": "^1.0.4",
     "@aspnet/signalr": "^1.0.27",
+    "@microsoft/signalr": "^6.0.10",
     "@taquito/signer": "^14.0.0",
     "@taquito/taquito": "^14.0.0",
     "@taquito/utils": "^14.0.0",
