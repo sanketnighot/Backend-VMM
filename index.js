@@ -76,7 +76,7 @@ iO.on('connection', (client) => {
   TradeDataMinute.watch([{ $match: { operationType: { $in: ['insert'] } } }]).
     on('change', data => {
       console.log('Insert action triggered'); //getting triggered thrice
-      client.emit("data4", data.fullDocument.Close);
+      client.emit("data3", data.fullDocument.Close);
     });
   TradeDataMinute.watch([{ $match: { operationType: { $in: ['update'] } } }]).
     on('change', data => {
@@ -124,7 +124,7 @@ app.post('/positionshistory', async (req, res) => {
 // SEND CANDLE DATA -------------------------------------------------------------------------------------------------------------------
 const getData = async () => {
 
-  const result = await TradeDataMinute.find({}).sort({ _id: -1 }).limit(100, function (data) {
+  const result = await TradeDataMinute.find({}).sort({ _id: -1 }).limit(864, function (data) {
     return data.reverse()
   }).catch(err => console.log(err))
 
